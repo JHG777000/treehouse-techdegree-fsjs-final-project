@@ -1,0 +1,31 @@
+{
+  "name": "treehouse-techdegree-fsjs-project-10",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon ./app.js",
+    "seed": "cross-env DB_ENABLE_LOGGING=true node './seed'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JHG777000/treehouse-techdegree-fsjs-project-10.git"
+  },
+  "author": "Jacob Gordon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JHG777000/treehouse-techdegree-fsjs-project-10/issues"
+  },
+  "homepage": "https://github.com/JHG777000/treehouse-techdegree-fsjs-project-10#readme",
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^5.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.0",
+    "promise.prototype.finally": "^3.1.0",
+    "sequelize": "^5.21.9",
+    "sqlite3": "^4.2.0"
+  }
+}
