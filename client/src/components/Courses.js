@@ -8,11 +8,9 @@ export default class Courses extends React.Component {
     };
   }
   componentDidMount() {
-
-  }
-  componentDidUpdate() {
     this.performQuery();
   }
+  componentDidUpdate() {}
 
   performQuery = () => {
     fetch(`http://localhost:5000/api/courses`)
@@ -30,14 +28,32 @@ export default class Courses extends React.Component {
       const results = props.data;
       let boxes = undefined;
       if (results !== undefined && results.length > 0) {
-        boxes = results.map((box) => <h2> {box.title} </h2>);
+        boxes = results.map((box) => {
+          return (
+            <div className="grid-33">
+              <a className="course--module course--link" href="/">
+                <h4 className="course--label"> Course </h4>
+                <h3 className="course--title">{box.title}</h3>
+              </a>
+            </div>
+          );
+        });
       }
       return <div>{boxes}</div>;
     };
+   
     return (
       <div>
         <h1> FSJS project 10 Courses </h1>
-        <Box data={this.state.courses} />
+          <div className="bounds">
+            <Box data={this.state.courses} />
+            <div className="grid-33"><a className="course--module course--add--module" href="create-course.html">
+            <h3 className="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                viewBox="0 0 13 13" className="add">
+                <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
+              </svg>New Course</h3>
+          </a></div>
+          </div>
       </div>
     );
   }
