@@ -28,7 +28,7 @@ export default class Courses extends React.Component {
       const TheCourse = (props) => {
         return (
           <div className="grid-33">
-            <a className="course--module course--link" href="/">
+            <a className="course--module course--link" href={"/api/courses/" + props.id}>
               <h4 className="course--label"> Course </h4>
               <h3 className="course--title">{props.title}</h3>
             </a>
@@ -39,7 +39,7 @@ export default class Courses extends React.Component {
       let boxes = undefined;
       if (results !== undefined && results.length > 0) {
         boxes = results.map((box) => (
-          <TheCourse title={box.title} key={box.id} />
+          <TheCourse title={box.title} id={box.id} key={box.id} />
         ));
       }
       return <div>{boxes}</div>;
@@ -52,7 +52,7 @@ export default class Courses extends React.Component {
           <div className="grid-33">
             <a
               className="course--module course--add--module"
-              href="create-course.html"
+              href="/courses/create"
             >
               <h3 className="course--add--title">
                 <svg

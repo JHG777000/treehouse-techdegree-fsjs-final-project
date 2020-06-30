@@ -7,6 +7,7 @@ import React from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Courses from './Courses';
+import CourseDetail from './CourseDetail';
 
 //Main switch for the App, manages and sets up routes
 
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/">
             <Courses />
           </Route>
+          <Route exact path="/api/courses/:id" component={CourseDetail} />
         </Switch>
       </div>
     </BrowserRouter>
