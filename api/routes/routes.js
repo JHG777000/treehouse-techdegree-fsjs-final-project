@@ -119,6 +119,7 @@ const sendCourses = (courses) => {
       User: courses[i].User,
       title: courses[i].title,
       description: courses[i].description,
+      estimatedTime: courses[i].estimatedTime,
       materialsNeeded: courses[i].materialsNeeded,
     });
     i++;
@@ -153,6 +154,7 @@ routes.get('/api/courses/:id', async (req, res) => {
       User: course.User,
       title: course.title,
       description: course.description,
+      estimatedTime: course.estimatedTime,
       materialsNeeded: course.materialsNeeded,
     });
     res.status(200);
@@ -169,6 +171,8 @@ routes.post('/api/courses', authenticateUser, async (req, res) => {
       title: req.body.title === undefined ? '' : req.body.title,
       description:
         req.body.description === undefined ? '' : req.body.description,
+      estimatedTime:
+        req.body.estimatedTime === undefined ? '' : req.body.estimatedTime,
       materialsNeeded:
         req.body.materialsNeeded === undefined ? '' : req.body.materialsNeeded,
     });
@@ -193,6 +197,8 @@ routes.put('/api/courses/:id', authenticateUser, async (req, res) => {
           title: req.body.title === undefined ? '' : req.body.title,
           description:
             req.body.description === undefined ? '' : req.body.description,
+          estimatedTime:
+            req.body.estimatedTime === undefined ? '' : req.body.estimatedTime,
           materialsNeeded:
             req.body.materialsNeeded === undefined
               ? ''

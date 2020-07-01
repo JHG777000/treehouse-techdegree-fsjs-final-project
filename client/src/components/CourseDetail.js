@@ -24,17 +24,52 @@ export default class CourseDetail extends React.Component {
   };
 
   render() {
-    if (this.state.course !== undefined) {
+    const TheCourse = (props) => {
       return (
-        <div>
-          <h1>Hello WOrld!</h1>
-          <h1>{this.state.course.title}</h1>
+        <div className="bounds course--detail">
+          <div className="grid-66">
+            <div className="course--header">
+              <h4 className="course--label">Course</h4>
+              <h3 className="course--title">{props.title}</h3>
+              <p>By {props.name}</p>
+            </div>
+            <div className="course--description">
+              <p>{props.description}</p>
+            </div>
+          </div>
+          <div className="grid-25 grid-right">
+            <div className="course--stats">
+              <ul className="course--stats--list">
+                <li className="course--stats--list--item">
+                  <h4>Estimated Time</h4>
+                  <h3>{props.estimatedTime}</h3>
+                </li>
+                <li className="course--stats--list--item">
+                  <h4>Materials Needed</h4>
+                  <ul>{props.materialsNeeded}</ul>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
+      );
+    };
+
+    if (this.state.course !== undefined) {
+      const course = this.state.course;
+      return (
+        <TheCourse
+          title={course.title}
+          name={course.User.firstName + ' ' + course.User.lastName}
+          description={course.description}
+          estimatedTime={course.estimatedTime}
+          materialsNeeded={course.materialsNeeded}
+        />
       );
     } else
       return (
         <div>
-          <h1>Hello WOrld!</h1>
+          <h1>No course!</h1>
         </div>
       );
   }
