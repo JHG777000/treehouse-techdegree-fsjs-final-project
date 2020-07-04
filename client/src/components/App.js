@@ -18,6 +18,7 @@ export default class App extends React.Component {
         username: undefined,
         password: undefined,
       },
+      authenticatedUser: null,
     };
   }
   componentDidMount() {}
@@ -43,10 +44,13 @@ export default class App extends React.Component {
     );
 
     if (authUser.status === 401) {
+      this.setState({ authenticatedUser: null });
       return null;
     }
 
-    this.setState({ user: user });
+    authUser.json().then((data) => data);
+
+    this.setState({ user: user, authenticatedUser: authUser });
   };
 
   signOut = () => {
@@ -55,10 +59,10 @@ export default class App extends React.Component {
       password: undefined,
     };
 
-    this.setState({ user: user });
+    this.setState({ user: user, authenticatedUser: null });
   };
 
-  getAuth = method => {
+  getAuth = (method) => {
     const options = {
       method,
       headers: {
