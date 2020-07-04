@@ -68,9 +68,13 @@ export default class CourseDetail extends React.Component {
       );
     } else
       return (
-        <div>
-          <h1>No course!</h1>
-        </div>
+        <TheCourse
+          title=''
+          name=''
+          description=''
+          estimatedTime=''
+          materialsNeeded=''
+        />
       );
   }
 }
