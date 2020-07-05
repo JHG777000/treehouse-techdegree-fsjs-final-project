@@ -8,6 +8,8 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Courses from './Courses';
 import CourseDetail from './CourseDetail';
+import Header from './Header';
+import UserSignOut from './UserSignOut';
 
 //Main switch for the App, manages and sets up routes
 export default class App extends React.Component {
@@ -29,6 +31,7 @@ export default class App extends React.Component {
       signIn: this.signIn,
       signOut: this.signOut,
       getAuth: this.getAuth,
+      authenticatedUser: this.getauthenticatedUser,
     };
   };
 
@@ -78,13 +81,21 @@ export default class App extends React.Component {
     return options;
   };
 
+  getauthenticatedUser = () => {
+    return this.state.authenticatedUser;
+  };
+
   render() {
     return (
       <BrowserRouter>
         <div className="container">
+          <Header utility={this.utility} />
           <Switch>
             <Route exact path="/">
               <Courses utility={this.utility} />
+            </Route>
+            <Route exact path="/signout">
+              <UserSignOut utility={this.utility} />
             </Route>
             <Route exact path="/api/courses/:id" component={CourseDetail} />
           </Switch>
