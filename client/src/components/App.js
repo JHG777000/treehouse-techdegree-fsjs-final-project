@@ -10,6 +10,7 @@ import Courses from './Courses';
 import CourseDetail from './CourseDetail';
 import Header from './Header';
 import UserSignOut from './UserSignOut';
+import UserSignUp from './UserSignUp';
 
 //Main switch for the App, manages and sets up routes
 export default class App extends React.Component {
@@ -32,6 +33,7 @@ export default class App extends React.Component {
       signOut: this.signOut,
       getAuth: this.getAuth,
       authenticatedUser: this.getauthenticatedUser,
+      sendData: this.sendData,
     };
   };
 
@@ -40,6 +42,8 @@ export default class App extends React.Component {
       username: username,
       password: password,
     };
+
+    this.setState({ user: user});
 
     const authUser = await fetch(
       'http://localhost:5000/api/users',
@@ -85,6 +89,11 @@ export default class App extends React.Component {
     return this.state.authenticatedUser;
   };
 
+  sendData = (data, options) => {
+    options.body = JSON.stringify(data);
+    return options;
+  };
+
   render() {
     return (
       <BrowserRouter>
@@ -96,6 +105,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/signout">
               <UserSignOut utility={this.utility} />
+            </Route>
+            <Route exact path="/signup">
+              <UserSignUp utility={this.utility} />
             </Route>
             <Route exact path="/api/courses/:id" component={CourseDetail} />
           </Switch>

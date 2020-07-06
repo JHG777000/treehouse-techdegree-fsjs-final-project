@@ -6,16 +6,15 @@ export default class UserSignUp extends Component {
   constructor() {
     super();
     this.state = {
-      name: '',
-      username: '',
+      firstName: '',
+      lastName: '',
+      emailAddress: '',
       password: '',
       errors: [],
     };
   }
 
   render() {
-    // const { name, username, password, errors } = this.state.;
-
     return (
       <div className="bounds">
         <div className="grid-33 centered signin">
@@ -28,12 +27,28 @@ export default class UserSignUp extends Component {
             elements={() => (
               <Fragment>
                 <input
-                  id="username"
-                  name="username"
+                  id="firstName"
+                  name="firstName"
                   type="text"
-                  value={this.state.username}
+                  value={this.state.firstName}
                   onChange={this.change}
-                  placeholder="User Name"
+                  placeholder="First Name"
+                />
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  value={this.state.lastName}
+                  onChange={this.change}
+                  placeholder="Last Name"
+                />
+                <input
+                  id="emailAddress"
+                  name="emailAddress"
+                  type="text"
+                  value={this.state.emailAddress}
+                  onChange={this.change}
+                  placeholder="Email Address"
                 />
                 <input
                   id="password"
@@ -56,10 +71,8 @@ export default class UserSignUp extends Component {
   }
 
   change = (event) => {
-    this.setState(() => {
-      return {
-        [event.target.name]: event.target.value,
-      };
+    this.setState({
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -69,13 +82,34 @@ export default class UserSignUp extends Component {
 
     // Create user
     const user = {
-      name,
-      username,
-      password,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      emailAddress: this.state.emailAddress,
+      password: this.state.password,
     };
 
-    //createUser
+    const getAuth = this.props.utility().getAuth;
+    const sendData = this.props.utility().sendData;
 
-    cancel = () => {};
+    //createUser
+    const res = fetch(
+      'http://localhost:5000/api/users',
+      sendData(user,getAuth('POST'))
+    )
+      .then((errors) => {
+        if (errors.length) {
+          this.setState({ errors });
+        } else {
+          this.props.utility().signIn(user.emailAddress, user.password);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        //this.props.history.push('/error');
+      });
+  };
+
+  cancel = () => {
+    this.props.history.push('/');
   };
 }
