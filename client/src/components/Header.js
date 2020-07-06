@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = (props) => {
@@ -9,15 +9,15 @@ const Header = (props) => {
           <h1 className="header--logo">Courses</h1>
           <nav>
             {authUser ? (
-              <React.Fragment>
+              <Fragment>
                 <span>Welcome, {authUser.name}!</span>
                 <Link to="/signout">Sign Out</Link>
-              </React.Fragment>
+              </Fragment>
             ) : (
-              <React.Fragment>
+              <Fragment>
                 <Link className="signup" to="/signup">Sign Up</Link>
                 <Link className="signin" to="/signin">Sign In</Link>
-              </React.Fragment>
+              </Fragment>
             )}
           </nav>
         </div>
