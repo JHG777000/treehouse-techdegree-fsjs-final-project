@@ -43,7 +43,7 @@ export default class App extends React.Component {
       password: password,
     };
 
-    this.setState({ user: user});
+    this.setState({ user: user });
 
     const authUser = await fetch(
       'http://localhost:5000/api/users',
@@ -54,10 +54,15 @@ export default class App extends React.Component {
       this.setState({ authenticatedUser: null });
       return null;
     }
-
-    authUser.json().then((data) => data);
-
-    this.setState({ user: user, authenticatedUser: authUser });
+    authUser
+      .json()
+      .then((data) => data)
+      .then((responseData) => {
+        this.setState({ authenticatedUser: responseData });
+      })
+      .catch((error) => {
+        this.setState({ authenticatedUser: null });
+      });
   };
 
   signOut = () => {
