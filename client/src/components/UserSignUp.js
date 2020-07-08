@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Form from './Form';
 
@@ -106,10 +107,12 @@ export default class UserSignUp extends Component {
       .catch((err) => {
         console.log(err);
         //this.props.history.push('/error');
+        return <Redirect to="/error" /> ;
       });
   };
 
   cancel = () => {
-    this.props.history.push('/');
+    return <Redirect to="/" /> ;
+    //this.props.history.push('/');
   };
 }
