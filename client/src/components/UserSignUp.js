@@ -89,30 +89,30 @@ export default class UserSignUp extends Component {
       password: this.state.password,
     };
 
+    const user0 = {
+      username: this.state.emailAddress,
+      password: this.state.password,
+    };
+
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
 
     //createUser
     const res = fetch(
       'http://localhost:5000/api/users',
-      sendData(user,getAuth('POST'))
+      sendData(user, getAuth(user0,'POST'))
     )
       .then((errors) => {
         if (errors.length) {
           this.setState({ errors });
         } else {
           this.props.utility().signIn(user.emailAddress, user.password);
+          
         }
       })
       .catch((err) => {
         console.log(err);
-        //this.props.history.push('/error');
-        return <Redirect to="/error" /> ;
+        if (err.length) this.setState({ errors: err });
       });
-  };
-
-  cancel = () => {
-    return <Redirect to="/" /> ;
-    //this.props.history.push('/');
   };
 }

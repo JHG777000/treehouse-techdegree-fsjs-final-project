@@ -18,7 +18,6 @@ export default class UserSignIn extends Component {
         <div className="grid-33 centered signin">
           <h1>Sign In</h1>
           <Form
-            cancel={this.cancel}
             errors={this.state.errors}
             submit={this.submit}
             submitButtonText="Sign In"
@@ -64,13 +63,6 @@ export default class UserSignIn extends Component {
       password: this.state.password,
     };
 
-    alert(user.emailAddress);
-    alert(user.password);
-
-    this.props.utility().signIn(user.emailAddress, user.password);
-  };
-
-  cancel = () => {
-   return <Redirect to="/" /> ;
+   this.props.utility().signIn(user.emailAddress, user.password);
   };
 }

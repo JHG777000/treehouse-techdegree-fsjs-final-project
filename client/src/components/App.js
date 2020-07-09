@@ -43,17 +43,15 @@ export default class App extends React.Component {
       username: username,
       password: password,
     };
-  
-    this.setState({ user: user });
-  
+
     const authUser = await fetch(
       'http://localhost:5000/api/users',
-      this.getAuth('GET')
+      this.getAuth(user, 'GET')
     );
 
     if (authUser.status === 401) {
       this.setState({ authenticatedUser: null });
-      return null;
+      return;
     }
     authUser
       .json()
@@ -75,7 +73,7 @@ export default class App extends React.Component {
     this.setState({ user: user, authenticatedUser: null });
   };
 
-  getAuth = (method) => {
+  getAuth = (user, method) => {
     const options = {
       method,
       headers: {
@@ -83,9 +81,7 @@ export default class App extends React.Component {
       },
     };
 
-    const encodedCredentials = btoa(
-      `${this.state.user.username}:${this.state.user.password}`
-    );
+    const encodedCredentials = btoa(`${user.username}:${user.password}`);
     options.headers['Authorization'] = `Basic ${encodedCredentials}`;
 
     return options;

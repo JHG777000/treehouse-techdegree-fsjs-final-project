@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Form = (props) => {
   const handleSubmit = (e) => {
@@ -8,7 +9,7 @@ const Form = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    props.cancel();
+    //props.cancel();
   };
 
   return (
@@ -21,7 +22,7 @@ const Form = (props) => {
             {props.submitButtonText}
           </button>
           <button className="button button-secondary" onClick={handleCancel}>
-            Cancel
+            <Link to="/">Cancel</Link>
           </button>
         </div>
       </form>
