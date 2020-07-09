@@ -10,13 +10,18 @@ const Form = (props) => {
   const handleCancel = (e) => {
     e.preventDefault();
   };
+//"pad-bottom"
+
+let buttonClassName = props.buttonClassName;
+if (buttonClassName === undefined || buttonClassName === null)
+buttonClassName = "pad-bottom";
 
   return (
     <div>
       <ShowErrors errors={props.errors} />
       <form onSubmit={handleSubmit}>
         {props.elements()}
-        <div className="pad-bottom">
+        <div className={buttonClassName}>
           <button className="button" type="submit">
             {props.submitButtonText}
           </button>

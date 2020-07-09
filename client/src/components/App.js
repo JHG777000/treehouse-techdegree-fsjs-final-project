@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Courses from './Courses';
 import CourseDetail from './CourseDetail';
+import CreateCourse from './CreateCourse';
 import Header from './Header';
 import UserSignOut from './UserSignOut';
 import UserSignUp from './UserSignUp';
@@ -109,6 +110,9 @@ export default class App extends React.Component {
           <Switch>
             <Route exact path="/">
               <Courses utility={this.utility} />
+            </Route>
+            <Route exact path="/courses/create">
+              <CreateCourse utility={this.utility} />
             </Route>
             <Route exact path="/signout">
               <UserSignOut utility={this.utility} />
