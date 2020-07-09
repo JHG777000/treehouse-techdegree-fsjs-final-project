@@ -17,7 +17,7 @@ export default class UserSignUp extends Component {
 
   getErrors = () => {
     return this.state.errors;
-  }
+  };
 
   render() {
     return (
@@ -101,22 +101,53 @@ export default class UserSignUp extends Component {
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
 
-    //createUser
-    const res = fetch(
-      'http://localhost:5000/api/users',
-      sendData(user, getAuth(user0,'POST'))
-    )
-      .then((errors) => {
+    const createUser = async () => {
+      const res = await fetch(
+        'http://localhost:5000/api/users',
+        sendData(user, getAuth(user0, 'POST'))
+      );
+      if (res.status >= 400) {
+        return res.json().then((data) => {
+          return data.message;
+        });
+      }
+      return [];
+    };
+
+    const res = createUser();
+
+    res.then((errors) => {
+      if (errors !== undefined && errors.length) {
+        this.setState({ errors });
+      } else {
+        const authUser = this.props
+          .utility()
+          .signIn(user.emailAddress, user.password);
+        authUser.then((errors) => {
+          if (errors !== undefined && errors.length) {
+            this.setState({ errors });
+          }
+        });
+      }
+    });
+
+    /*.then((errors) => {
         if (errors.length) {
           this.setState({ errors });
         } else {
-          this.props.utility().signIn(user.emailAddress, user.password);
-          
+          const authUser = this.props
+            .utility()
+            .signIn(user.emailAddress, user.password);
+          authUser.then((errors) => {
+            if (errors !== undefined && errors.length) {
+              this.setState({ errors });
+            }
+          });
         }
       })
       .catch((err) => {
         console.log(err);
         if (err.length) this.setState({ errors: err });
-      });
+      });*/
   };
 }

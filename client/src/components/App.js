@@ -55,6 +55,7 @@ export default class App extends React.Component {
         return data.message;
       });
     }
+
     authUser
       .json()
       .then((data) => data)
