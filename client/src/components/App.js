@@ -49,9 +49,11 @@ export default class App extends React.Component {
       this.getAuth(user, 'GET')
     );
 
-    if (authUser.status === 401) {
+    if (authUser.status >= 400) {
       this.setState({ authenticatedUser: null });
-      return;
+      return authUser.json().then((data) => {
+        return data.message;
+      });
     }
     authUser
       .json()
@@ -62,6 +64,8 @@ export default class App extends React.Component {
       .catch((error) => {
         this.setState({ authenticatedUser: null });
       });
+
+    return [];
   };
 
   signOut = () => {

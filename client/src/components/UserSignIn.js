@@ -12,6 +12,10 @@ export default class UserSignIn extends Component {
     };
   }
 
+   getErrors = () => {
+    return this.state.errors;
+  };
+
   render() {
     return (
       <div className="bounds">
@@ -63,6 +67,14 @@ export default class UserSignIn extends Component {
       password: this.state.password,
     };
 
-   this.props.utility().signIn(user.emailAddress, user.password);
+    const authUser = this.props
+      .utility()
+      .signIn(user.emailAddress, user.password);
+
+    authUser.then((errors) => {
+      if (errors !== undefined && errors.length) {
+        this.setState({ errors });
+      }
+    });
   };
 }

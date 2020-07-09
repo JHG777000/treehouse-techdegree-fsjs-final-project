@@ -15,6 +15,10 @@ export default class UserSignUp extends Component {
     };
   }
 
+  getErrors = () => {
+    return this.state.errors;
+  }
+
   render() {
     return (
       <div className="bounds">

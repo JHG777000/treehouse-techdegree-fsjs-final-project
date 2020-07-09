@@ -9,7 +9,6 @@ const Form = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    //props.cancel();
   };
 
   return (
@@ -30,8 +29,10 @@ const Form = (props) => {
   );
 };
 
-const ShowErrors = (errors) => {
-  if (errors.length) {
+const ShowErrors = (props) => {
+ let errors = props.errors;
+  if (errors !== undefined && errors.length) {
+    let errors = [props.errors];
     return (
       <div>
         <h2 className="validation--errors--label">Validation errors</h2>
