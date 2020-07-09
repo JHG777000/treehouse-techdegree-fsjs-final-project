@@ -82,9 +82,6 @@ export default class UserSignUp extends Component {
   };
 
   submit = () => {
-    //const { context } = this.props;
-    //const { name, username, password } = this.state;
-
     // Create user
     const user = {
       firstName: this.state.firstName,
@@ -130,24 +127,5 @@ export default class UserSignUp extends Component {
         });
       }
     });
-
-    /*.then((errors) => {
-        if (errors.length) {
-          this.setState({ errors });
-        } else {
-          const authUser = this.props
-            .utility()
-            .signIn(user.emailAddress, user.password);
-          authUser.then((errors) => {
-            if (errors !== undefined && errors.length) {
-              this.setState({ errors });
-            }
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.length) this.setState({ errors: err });
-      });*/
   };
 }

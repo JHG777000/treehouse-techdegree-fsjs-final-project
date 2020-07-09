@@ -101,7 +101,7 @@ routes.post('/api/users', async (req, res) => {
       err.name === 'SequelizeValidationError' ||
       err.name == 'SequelizeUniqueConstraintError'
     ) {
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ message: err.message + ', invalid username(email) or username(email) already in use.' });
     } else {
       res.status(500).json({ message: err.message });
     }
