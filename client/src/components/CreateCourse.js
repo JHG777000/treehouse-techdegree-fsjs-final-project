@@ -7,7 +7,6 @@ export default class CreateCourse extends Component {
     super();
     this.state = {
       title: '',
-      name: '',
       description: '',
       estimatedTime: '',
       materialsNeeded: '',
@@ -17,7 +16,10 @@ export default class CreateCourse extends Component {
 
   render() {
     const authUser = this.props.utility().authenticatedUser();
-    const username = authUser === null ? 'noone' : authUser.firstName;
+    const username =
+      authUser === null
+        ? 'noone'
+        : authUser.firstName + ' ' + authUser.lastName;
     return (
       <div>
         <h1>Create Course</h1>
@@ -30,7 +32,7 @@ export default class CreateCourse extends Component {
           elements={() => (
             <Fragment>
               <Fragment>
-                <div class="grid-66">
+                <div className="grid-66">
                   <div className="course--header">
                     <h4 className="course--label">Course</h4>
                     <input
@@ -101,25 +103,28 @@ export default class CreateCourse extends Component {
 
   submit = () => {
     // Create Course
-    const user = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      emailAddress: this.state.emailAddress,
-      password: this.state.password,
+    const authUser = this.props.utility().authenticatedUser();
+    const username =
+      authUser === null
+        ? 'noone'
+        : authUser.firstName + ' ' + authUser.lastName;
+    const course = {
+      title: this.state.title,
+      name: username,
+      description: this.state.description,
+      estimatedTime: this.state.estimatedTime,
+      materialsNeeded: this.state.materialsNeeded,
     };
 
-    const user0 = {
-      username: this.state.emailAddress,
-      password: this.state.password,
-    };
+    const user = this.props.utility().getUser();
 
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
 
     const CreateCourse = async () => {
       const res = await fetch(
-        'http://localhost:5000/api/users',
-        sendData(user, getAuth(user0, 'POST'))
+        'http://localhost:5000/api/courses',
+        sendData(course, getAuth(user, 'POST'))
       );
       if (res.status >= 400) {
         return res.json().then((data) => {

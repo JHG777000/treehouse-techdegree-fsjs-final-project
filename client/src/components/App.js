@@ -4,6 +4,7 @@ FSJS project 10 - React Gallery App
 ************************************************/
 
 import React from 'react';
+import Cookies from 'js-cookie';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import Courses from './Courses';
@@ -23,7 +24,7 @@ export default class App extends React.Component {
         username: undefined,
         password: undefined,
       },
-      authenticatedUser: null,
+      authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
     };
   }
   componentDidMount() {}
@@ -35,6 +36,7 @@ export default class App extends React.Component {
       signOut: this.signOut,
       getAuth: this.getAuth,
       authenticatedUser: this.getauthenticatedUser,
+      getUser: this.getUser,
       sendData: this.sendData,
     };
   };
@@ -62,11 +64,23 @@ export default class App extends React.Component {
       .then((data) => data)
       .then((responseData) => {
         this.setState({ authenticatedUser: responseData });
+        Cookies.set('authenticatedUser', JSON.stringify(responseData), {
+          expires: 1,
+        });
       })
       .catch((error) => {
         this.setState({ authenticatedUser: null });
       });
 
+    this.setState({ user: user });
+
+    const encodedPass = btoa(`encodedUser:${Math.random()}:${user.password}`);
+
+    const encodedUser = {
+      username: user.username,
+      password: encodedPass,
+    };
+    Cookies.set('encodedUser', JSON.stringify(encodedUser), { expires: 1 });
     return [];
   };
 
@@ -95,6 +109,38 @@ export default class App extends React.Component {
 
   getauthenticatedUser = () => {
     return this.state.authenticatedUser;
+  };
+
+  getUser = () => {
+    let user = Cookies.getJSON('encodedUser') || null;
+    if (user === null) return this.state.user;
+    const getEncodedPass = (ep) => {
+      let i = 0;
+      let j = 0;
+      let pass = '';
+      ep = atob(ep);
+      while (i < ep.length) {
+        if (ep[i] === ':') j++;
+        i++;
+        if (j === 2) break;
+      }
+      while (i < ep.length) {
+        if (ep[i] === ':') break;
+        pass += ep[i];
+        i++;
+      }
+      return pass;
+    };
+    const encodedUser = {
+      username: user.username,
+      password: getEncodedPass(user.password),
+    };
+    this.setState({ user: encodedUser });
+    return encodedUser;
+  };
+
+  getTest = () => {
+    return this.state.test;
   };
 
   sendData = (data, options) => {

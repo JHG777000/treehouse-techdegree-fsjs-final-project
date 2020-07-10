@@ -39,7 +39,6 @@ const authenticateUser = async (req, res, next) => {
       }
       //if authenticated
       if (authenticated) {
-        req.currentUser = user;
         console.log(
           `Authentication successful for username: ${user.firstName}`
         );

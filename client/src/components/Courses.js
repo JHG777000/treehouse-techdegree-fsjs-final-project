@@ -24,7 +24,6 @@ export default class Courses extends React.Component {
   };
 
   render() {
-    //this.props.utility().signIn();
     const Boxes = (props) => {
       const TheCourse = (props) => {
         return (
