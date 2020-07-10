@@ -6,11 +6,16 @@ export default class UpdateCourse extends Component {
   constructor() {
     super();
     this.state = {
-      title: undefined,
-      description: undefined,
-      estimatedTime: undefined,
-      materialsNeeded: undefined,
-      course: undefined,
+      title: '',
+      description: '',
+      estimatedTime: '',
+      materialsNeeded: '',
+      course: {
+        title: '',
+        description: '',
+        estimatedTime: '',
+        materialsNeeded: '',
+      },
       errors: [],
     };
   }
@@ -137,18 +142,21 @@ export default class UpdateCourse extends Component {
     // Update Course
     const course = {
       title:
-        this.state.title === undefined
+        this.state.title === ''
           ? this.state.course.title
           : this.state.title,
-      description: this.state.description === undefined
-      ? this.state.course.description
-      : this.state.description,
-      estimatedTime: this.state.estimatedTime === undefined
-      ? this.state.course.estimatedTime
-      : this.state.estimatedTime,
-      materialsNeeded: this.state.materialsNeeded === undefined
-      ? this.state.course.materialsNeeded
-      : this.state.materialsNeeded,
+      description:
+        this.state.description === ''
+          ? this.state.course.description
+          : this.state.description,
+      estimatedTime:
+        this.state.estimatedTime === ''
+          ? this.state.course.estimatedTime
+          : this.state.estimatedTime,
+      materialsNeeded:
+        this.state.materialsNeeded === ''
+          ? this.state.course.materialsNeeded
+          : this.state.materialsNeeded,
     };
 
     const user = this.props.utility().getUser();
@@ -176,5 +184,6 @@ export default class UpdateCourse extends Component {
         this.setState({ errors });
       }
     });
+    window.location.reload();
   };
 }

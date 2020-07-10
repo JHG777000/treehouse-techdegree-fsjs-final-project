@@ -154,18 +154,39 @@ export default class App extends React.Component {
   render() {
     const renderMergedProps = (component, ...rest) => {
       const finalProps = Object.assign({}, ...rest);
-      return (
-        React.createElement(component, finalProps)
-      );
-    }
-    
+      return React.createElement(component, finalProps);
+    };
+
     const PropsRoute = ({ component, ...rest }) => {
       return (
-        <Route {...rest} render={routeProps => {
-          return renderMergedProps(component, routeProps, rest);
-        }}/>
+        <Route
+          {...rest}
+          render={(routeProps) => {
+            return renderMergedProps(component, routeProps, rest);
+          }}
+        />
       );
-    }
+    };
+
+    const PrivateRoute = ({ component, redirectTo, ...rest }) => {
+      return (
+        <Route
+          {...rest}
+          render={(routeProps) => {
+            return this.state.authenticatedUser ? (
+              renderMergedProps(component, routeProps, rest)
+            ) : (
+              <Redirect
+                to={{
+                  pathname: redirectTo,
+                  state: { from: routeProps.location },
+                }}
+              />
+            );
+          }}
+        />
+      );
+    };
     return (
       <BrowserRouter>
         <div className="container">
@@ -187,7 +208,12 @@ export default class App extends React.Component {
               <UserSignIn utility={this.utility} />
             </Route>
             <Route exact path="/api/courses/:id" component={CourseDetail} />
-            <PropsRoute exact path="/courses/:id/update" component={UpdateCourse} utility={this.utility}  />
+            <PrivateRoute
+              exact
+              path="/courses/:id/update"
+              component={UpdateCourse}
+              utility={this.utility}
+            />
           </Switch>
         </div>
       </BrowserRouter>
