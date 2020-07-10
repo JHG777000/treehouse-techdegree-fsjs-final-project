@@ -12,10 +12,6 @@ export default class UserSignIn extends Component {
     };
   }
 
-   getErrors = () => {
-    return this.state.errors;
-  };
-
   render() {
     return (
       <div className="bounds">

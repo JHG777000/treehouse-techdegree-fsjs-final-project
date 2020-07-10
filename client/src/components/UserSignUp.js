@@ -15,17 +15,12 @@ export default class UserSignUp extends Component {
     };
   }
 
-  getErrors = () => {
-    return this.state.errors;
-  };
-
   render() {
     return (
       <div className="bounds">
         <div className="grid-33 centered signin">
           <h1>Sign Up</h1>
           <Form
-            cancel={this.cancel}
             errors={this.state.errors}
             submit={this.submit}
             submitButtonText="Sign Up"

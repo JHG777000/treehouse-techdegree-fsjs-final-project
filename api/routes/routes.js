@@ -158,7 +158,7 @@ routes.get('/api/courses/:id', async (req, res) => {
     });
     res.status(200);
   } catch (err) {
-    res.status(400).json({ message: 'Could not find course.' });
+    res.status(404).json({ message: 'Could not find course.' });
   }
 });
 

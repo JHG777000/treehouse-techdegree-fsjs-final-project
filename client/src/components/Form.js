@@ -17,7 +17,7 @@ buttonClassName = "pad-bottom";
 
   return (
     <div>
-      <ShowErrors errors={props.errors} />
+      <ShowErrors errors={props.utility().getError()} />
       <form onSubmit={handleSubmit}>
         {props.elements()}
         <div className={buttonClassName}>
@@ -35,6 +35,7 @@ buttonClassName = "pad-bottom";
 
 const ShowErrors = (props) => {
  let errors = props.errors;
+ alert(errors);
   if (errors !== undefined && errors.length) {
     let errors = [props.errors];
     return (

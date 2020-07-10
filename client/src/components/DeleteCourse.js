@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 const DeleteCourse = (props) => {
   const user = props.utility().getUser();
   const getAuth = props.utility().getAuth;
-  alert(props.match.params.id);
   fetch(
     'http://localhost:5000/api/courses/' + props.match.params.id,
     getAuth(user, 'DELETE')

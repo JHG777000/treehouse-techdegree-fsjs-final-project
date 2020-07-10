@@ -16,6 +16,7 @@ import Header from './Header';
 import UserSignOut from './UserSignOut';
 import UserSignUp from './UserSignUp';
 import UserSignIn from './UserSignIn';
+import UnhandledError from './UnhandledError';
 
 //Main switch for the App, manages and sets up routes
 export default class App extends React.Component {
@@ -27,6 +28,7 @@ export default class App extends React.Component {
         password: undefined,
       },
       authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
+      errorState: undefined,
     };
   }
   componentDidMount() {}
@@ -40,6 +42,8 @@ export default class App extends React.Component {
       authenticatedUser: this.getauthenticatedUser,
       getUser: this.getUser,
       sendData: this.sendData,
+      setError: this.setError,
+      getError: this.getError,
     };
   };
 
@@ -146,14 +150,18 @@ export default class App extends React.Component {
     return encodedUser;
   };
 
-  getTest = () => {
-    return this.state.test;
-  };
-
   sendData = (data, options) => {
     options.body = JSON.stringify(data);
     return options;
   };
+
+  setError = (error) => {
+    this.setState({errorState: error});
+  }
+
+  getError = (error) => {
+    return this.state.errorState;
+  }
 
   render() {
     const renderMergedProps = (component, ...rest) => {
@@ -204,6 +212,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/signin">
               <UserSignIn utility={this.utility} />
+            </Route>
+            <Route exact path="/error">
+              <UnhandledError utility={this.utility} />
             </Route>
             <PropsRoute
               exact

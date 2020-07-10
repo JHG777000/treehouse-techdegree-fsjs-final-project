@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Form from './Form';
 
 export default class CreateCourse extends Component {
+  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -12,6 +13,14 @@ export default class CreateCourse extends Component {
       materialsNeeded: '',
       errors: [],
     };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
@@ -24,8 +33,8 @@ export default class CreateCourse extends Component {
       <div>
         <h1>Create Course</h1>
         <Form
+          utility={this.props.utility}
           buttonClassName="grid-100 pad-bottom"
-          cancel={this.cancel}
           errors={this.state.errors}
           submit={this.submit}
           submitButtonText="Create Course"
@@ -74,14 +83,14 @@ export default class CreateCourse extends Component {
                           placeholder="Hours"
                         />
                       </li>
-                      <li class="course--stats--list--item">
+                      <li className="course--stats--list--item">
                         <h4>Materials Needed</h4>
                         <textarea
                           id="materialsNeeded"
                           name="materialsNeeded"
                           value={this.state.materialsNeeded}
                           onChange={this.change}
-                          placeholder="List materials..."
+                          placeholder={'List materials...'}
                         />
                       </li>
                     </ul>
@@ -132,7 +141,11 @@ export default class CreateCourse extends Component {
 
     res.then((errors) => {
       if (errors !== undefined && errors.length) {
-        this.setState({ errors });
+        //if (this._isMounted) {
+          //alert('hello');
+          //this.setState({ errors });
+          this.props.utility().setError(errors);
+        //}
       }
     });
   };
