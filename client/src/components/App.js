@@ -161,6 +161,14 @@ export default class App extends React.Component {
       return React.createElement(component, finalProps);
     };
 
+    const PropsRoute = ({ component, ...rest }) => {
+      return (
+        <Route {...rest} render={routeProps => {
+          return renderMergedProps(component, routeProps, rest);
+        }}/>
+      );
+    }
+
     const PrivateRoute = ({ component, redirectTo, ...rest }) => {
       return (
         <Route
@@ -197,7 +205,12 @@ export default class App extends React.Component {
             <Route exact path="/signin">
               <UserSignIn utility={this.utility} />
             </Route>
-            <Route exact path="/api/courses/:id" component={CourseDetail} />
+            <PropsRoute
+              exact
+              path="/api/courses/:id"
+              component={CourseDetail}
+              utility={this.utility}
+            />
             <PrivateRoute
               exact
               path="/courses/create"

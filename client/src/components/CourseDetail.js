@@ -25,38 +25,53 @@ export default class CourseDetail extends React.Component {
   };
 
   render() {
+    const authUser = this.props.utility().authenticatedUser();
     const TheCourse = (props) => {
       return (
         <Fragment>
-          <Fragment>
-            <div className="actions--bar">
-              <div className="bounds">
-                <div className="grid-100">
-                  <span>
-                    <a
-                      className="button"
-                      href={
-                        '/courses/' + this.props.match.params.id + '/update'
-                      }
-                    >
-                      Update Course
+          {authUser != null && authUser.id === props.userId ? (
+            <Fragment>
+              <div className="actions--bar">
+                <div className="bounds">
+                  <div className="grid-100">
+                    <span>
+                      <a
+                        className="button"
+                        href={
+                          '/courses/' + this.props.match.params.id + '/update'
+                        }
+                      >
+                        Update Course
+                      </a>
+                      <a
+                        className="button"
+                        href={
+                          '/courses/' + this.props.match.params.id + '/delete'
+                        }
+                      >
+                        Delete Course
+                      </a>
+                    </span>
+                    <a className="button button-secondary" href="/">
+                      Return to List
                     </a>
-                    <a
-                      className="button"
-                      href={
-                        '/courses/' + this.props.match.params.id + '/delete'
-                      }
-                    >
-                      Delete Course
-                    </a>
-                  </span>
-                  <a className="button button-secondary" href="/">
-                    Return to List
-                  </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Fragment>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <div className="actions--bar">
+                <div className="bounds">
+                  <div className="grid-100">
+                    <a className="button button-secondary" href="/">
+                      Return to List
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </Fragment>
+          )}
           <Fragment>
             <div className="bounds course--detail">
               <div className="grid-66">
@@ -66,9 +81,7 @@ export default class CourseDetail extends React.Component {
                   <p>By {props.name}</p>
                 </div>
                 <div className="course--description">
-                  <p>
-                    <ReactMarkdown source={props.description} />
-                  </p>
+                  <ReactMarkdown source={props.description} />
                 </div>
               </div>
               <div className="grid-25 grid-right">
@@ -97,6 +110,7 @@ export default class CourseDetail extends React.Component {
       const course = this.state.course;
       return (
         <TheCourse
+          userId={course.userId}
           title={course.title}
           name={course.User.firstName + ' ' + course.User.lastName}
           description={course.description}
@@ -107,6 +121,7 @@ export default class CourseDetail extends React.Component {
     } else
       return (
         <TheCourse
+          userId={0}
           title=""
           name=""
           description=""
