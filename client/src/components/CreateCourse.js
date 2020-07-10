@@ -15,14 +15,6 @@ export default class CreateCourse extends Component {
     };
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   render() {
     const authUser = this.props.utility().authenticatedUser();
     const username =
@@ -35,7 +27,6 @@ export default class CreateCourse extends Component {
         <Form
           utility={this.props.utility}
           buttonClassName="grid-100 pad-bottom"
-          errors={this.state.errors}
           submit={this.submit}
           submitButtonText="Create Course"
           elements={() => (
@@ -141,11 +132,7 @@ export default class CreateCourse extends Component {
 
     res.then((errors) => {
       if (errors !== undefined && errors.length) {
-        //if (this._isMounted) {
-          //alert('hello');
-          //this.setState({ errors });
           this.props.utility().setError(errors);
-        //}
       }
     });
   };

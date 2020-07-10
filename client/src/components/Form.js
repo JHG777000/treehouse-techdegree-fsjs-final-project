@@ -11,13 +11,14 @@ const Form = (props) => {
     e.preventDefault();
   };
 
-let buttonClassName = props.buttonClassName;
-if (buttonClassName === undefined || buttonClassName === null)
-buttonClassName = "pad-bottom";
-
+  let buttonClassName = props.buttonClassName;
+  if (buttonClassName === undefined || buttonClassName === null)
+    buttonClassName = 'pad-bottom';
+  let errors =
+    props.utility === undefined ? props.errors : props.utility().getError();
   return (
     <div>
-      <ShowErrors errors={props.utility().getError()} />
+      <ShowErrors errors={errors} />
       <form onSubmit={handleSubmit}>
         {props.elements()}
         <div className={buttonClassName}>
@@ -34,8 +35,7 @@ buttonClassName = "pad-bottom";
 };
 
 const ShowErrors = (props) => {
- let errors = props.errors;
- alert(errors);
+  let errors = props.errors;
   if (errors !== undefined && errors.length) {
     let errors = [props.errors];
     return (

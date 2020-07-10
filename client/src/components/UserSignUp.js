@@ -22,6 +22,7 @@ export default class UserSignUp extends Component {
           <h1>Sign Up</h1>
           <Form
             errors={this.state.errors}
+            utility={undefined}
             submit={this.submit}
             submitButtonText="Sign Up"
             elements={() => (

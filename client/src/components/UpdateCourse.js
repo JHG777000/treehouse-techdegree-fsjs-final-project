@@ -45,6 +45,7 @@ export default class UpdateCourse extends Component {
       <div>
         <h1>Update Course</h1>
         <Form
+          utility={this.props.utility}
           buttonClassName="grid-100 pad-bottom"
           cancel={this.cancel}
           errors={this.state.errors}
@@ -141,22 +142,10 @@ export default class UpdateCourse extends Component {
   submit = () => {
     // Update Course
     const course = {
-      title:
-        this.state.title === ''
-          ? this.state.course.title
-          : this.state.title,
-      description:
-        this.state.description === ''
-          ? this.state.course.description
-          : this.state.description,
-      estimatedTime:
-        this.state.estimatedTime === ''
-          ? this.state.course.estimatedTime
-          : this.state.estimatedTime,
-      materialsNeeded:
-        this.state.materialsNeeded === ''
-          ? this.state.course.materialsNeeded
-          : this.state.materialsNeeded,
+      title: this.state.title,
+      description: this.state.description,
+      estimatedTime: this.state.estimatedTime,
+      materialsNeeded: this.state.materialsNeeded,
     };
 
     const user = this.props.utility().getUser();
@@ -181,9 +170,8 @@ export default class UpdateCourse extends Component {
 
     res.then((errors) => {
       if (errors !== undefined && errors.length) {
-        this.setState({ errors });
+        this.props.utility().setError(errors);
       }
     });
-    window.location.reload();
   };
 }
