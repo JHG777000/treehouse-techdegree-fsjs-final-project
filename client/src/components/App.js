@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Courses from './Courses';
 import CourseDetail from './CourseDetail';
 import CreateCourse from './CreateCourse';
+import DeleteCourse from './DeleteCourse';
 import UpdateCourse from './UpdateCourse';
 import Header from './Header';
 import UserSignOut from './UserSignOut';
@@ -90,7 +91,6 @@ export default class App extends React.Component {
       username: undefined,
       password: undefined,
     };
-
     this.setState({ user: user, authenticatedUser: null });
     Cookies.remove('authenticatedUser');
     Cookies.remove('encodedUser');
@@ -117,6 +117,7 @@ export default class App extends React.Component {
   getUser = () => {
     let user = Cookies.getJSON('encodedUser') || null;
     if (user === null) return this.state.user;
+
     const getEncodedPass = (ep) => {
       let i = 0;
       let j = 0;
@@ -134,11 +135,14 @@ export default class App extends React.Component {
       }
       return pass;
     };
+
     const encodedUser = {
       username: user.username,
       password: getEncodedPass(user.password),
     };
+
     this.setState({ user: encodedUser });
+
     return encodedUser;
   };
 
@@ -155,17 +159,6 @@ export default class App extends React.Component {
     const renderMergedProps = (component, ...rest) => {
       const finalProps = Object.assign({}, ...rest);
       return React.createElement(component, finalProps);
-    };
-
-    const PropsRoute = ({ component, ...rest }) => {
-      return (
-        <Route
-          {...rest}
-          render={(routeProps) => {
-            return renderMergedProps(component, routeProps, rest);
-          }}
-        />
-      );
     };
 
     const PrivateRoute = ({ component, redirectTo, ...rest }) => {
@@ -195,9 +188,6 @@ export default class App extends React.Component {
             <Route exact path="/">
               <Courses utility={this.utility} />
             </Route>
-            <Route exact path="/courses/create">
-              <CreateCourse utility={this.utility} />
-            </Route>
             <Route exact path="/signout">
               <UserSignOut utility={this.utility} />
             </Route>
@@ -210,8 +200,20 @@ export default class App extends React.Component {
             <Route exact path="/api/courses/:id" component={CourseDetail} />
             <PrivateRoute
               exact
+              path="/courses/create"
+              component={CreateCourse}
+              utility={this.utility}
+            />
+            <PrivateRoute
+              exact
               path="/courses/:id/update"
               component={UpdateCourse}
+              utility={this.utility}
+            />
+            <PrivateRoute
+              exact
+              path="/courses/:id/delete"
+              component={DeleteCourse}
               utility={this.utility}
             />
           </Switch>

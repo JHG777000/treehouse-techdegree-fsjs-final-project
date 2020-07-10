@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 export default class CourseDetail extends React.Component {
   constructor() {
@@ -27,42 +28,67 @@ export default class CourseDetail extends React.Component {
     const TheCourse = (props) => {
       return (
         <Fragment>
-        <Fragment>
-        <div className="actions--bar">
-          <div className="bounds">
-            <div className="grid-100"><span><a className="button" href={"/courses/" + this.props.match.params.id + "/update"}>Update Course</a><a className="button" href="#">Delete Course</a></span><a
-                className="button button-secondary" href="/">Return to List</a></div>
-          </div>
-          </div>
+          <Fragment>
+            <div className="actions--bar">
+              <div className="bounds">
+                <div className="grid-100">
+                  <span>
+                    <a
+                      className="button"
+                      href={
+                        '/courses/' + this.props.match.params.id + '/update'
+                      }
+                    >
+                      Update Course
+                    </a>
+                    <a
+                      className="button"
+                      href={
+                        '/courses/' + this.props.match.params.id + '/delete'
+                      }
+                    >
+                      Delete Course
+                    </a>
+                  </span>
+                  <a className="button button-secondary" href="/">
+                    Return to List
+                  </a>
+                </div>
+              </div>
+            </div>
           </Fragment>
-           <Fragment>
-        <div className="bounds course--detail">
-          <div className="grid-66">
-            <div className="course--header">
-              <h4 className="course--label">Course</h4>
-              <h3 className="course--title">{props.title}</h3>
-              <p>By {props.name}</p>
+          <Fragment>
+            <div className="bounds course--detail">
+              <div className="grid-66">
+                <div className="course--header">
+                  <h4 className="course--label">Course</h4>
+                  <h3 className="course--title">{props.title}</h3>
+                  <p>By {props.name}</p>
+                </div>
+                <div className="course--description">
+                  <p>
+                    <ReactMarkdown source={props.description} />
+                  </p>
+                </div>
+              </div>
+              <div className="grid-25 grid-right">
+                <div className="course--stats">
+                  <ul className="course--stats--list">
+                    <li className="course--stats--list--item">
+                      <h4>Estimated Time</h4>
+                      <h3>{props.estimatedTime}</h3>
+                    </li>
+                    <li className="course--stats--list--item">
+                      <h4>Materials Needed</h4>
+                      <ul>
+                        <ReactMarkdown source={props.materialsNeeded} />
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div className="course--description">
-              <p>{props.description}</p>
-            </div>
-          </div>
-          <div className="grid-25 grid-right">
-            <div className="course--stats">
-              <ul className="course--stats--list">
-                <li className="course--stats--list--item">
-                  <h4>Estimated Time</h4>
-                  <h3>{props.estimatedTime}</h3>
-                </li>
-                <li className="course--stats--list--item">
-                  <h4>Materials Needed</h4>
-                  <ul>{props.materialsNeeded}</ul>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        </Fragment>
+          </Fragment>
         </Fragment>
       );
     };
@@ -81,11 +107,11 @@ export default class CourseDetail extends React.Component {
     } else
       return (
         <TheCourse
-          title=''
-          name=''
-          description=''
-          estimatedTime=''
-          materialsNeeded=''
+          title=""
+          name=""
+          description=""
+          estimatedTime=""
+          materialsNeeded=""
         />
       );
   }

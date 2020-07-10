@@ -10,7 +10,6 @@ const Form = (props) => {
   const handleCancel = (e) => {
     e.preventDefault();
   };
-//"pad-bottom"
 
 let buttonClassName = props.buttonClassName;
 if (buttonClassName === undefined || buttonClassName === null)
