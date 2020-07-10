@@ -2,17 +2,33 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
 
-export default class CreateCourse extends Component {
+export default class UpdateCourse extends Component {
   constructor() {
     super();
     this.state = {
-      title: '',
-      description: '',
-      estimatedTime: '',
-      materialsNeeded: '',
+      title: undefined,
+      description: undefined,
+      estimatedTime: undefined,
+      materialsNeeded: undefined,
+      course: undefined,
       errors: [],
     };
   }
+
+  componentDidMount() {
+    this.performQuery(this.props.match.params.id);
+  }
+
+  performQuery = (id) => {
+    fetch(`http://localhost:5000/api/courses/` + id)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({ course: responseData });
+      })
+      .catch((error) => {
+        console.log('Error fetching and parsing data', error);
+      });
+  };
 
   render() {
     const authUser = this.props.utility().authenticatedUser();
@@ -22,13 +38,13 @@ export default class CreateCourse extends Component {
         : authUser.firstName + ' ' + authUser.lastName;
     return (
       <div>
-        <h1>Create Course</h1>
+        <h1>Update Course</h1>
         <Form
           buttonClassName="grid-100 pad-bottom"
           cancel={this.cancel}
           errors={this.state.errors}
           submit={this.submit}
-          submitButtonText="Create Course"
+          submitButtonText="Update Course"
           elements={() => (
             <Fragment>
               <Fragment>
@@ -42,7 +58,11 @@ export default class CreateCourse extends Component {
                       className="input-title course--title--input"
                       value={this.state.title}
                       onChange={this.change}
-                      placeholder="Course title..."
+                      placeholder={
+                        this.state.course === undefined
+                          ? ''
+                          : this.state.course.title
+                      }
                     />
                     <p>By {username}</p>
                     <div className="course--description">
@@ -52,7 +72,11 @@ export default class CreateCourse extends Component {
                         type="text"
                         value={this.state.description}
                         onChange={this.change}
-                        placeholder="Course description..."
+                        placeholder={
+                          this.state.course === undefined
+                            ? ''
+                            : this.state.course.description
+                        }
                       />
                     </div>
                   </div>
@@ -71,17 +95,25 @@ export default class CreateCourse extends Component {
                           className="course--time--input"
                           value={this.state.estimatedTime}
                           onChange={this.change}
-                          placeholder="Hours"
+                          placeholder={
+                            this.state.course === undefined
+                              ? ''
+                              : this.state.course.estimatedTime
+                          }
                         />
                       </li>
-                      <li class="course--stats--list--item">
+                      <li className="course--stats--list--item">
                         <h4>Materials Needed</h4>
                         <textarea
                           id="materialsNeeded"
                           name="materialsNeeded"
                           value={this.state.materialsNeeded}
                           onChange={this.change}
-                          placeholder="List materials..."
+                          placeholder={
+                            this.state.course === undefined
+                              ? ''
+                              : this.state.course.materialsNeeded
+                          }
                         />
                       </li>
                     </ul>
@@ -102,12 +134,21 @@ export default class CreateCourse extends Component {
   };
 
   submit = () => {
-    // Create Course
+    // Update Course
     const course = {
-      title: this.state.title,
-      description: this.state.description,
-      estimatedTime: this.state.estimatedTime,
-      materialsNeeded: this.state.materialsNeeded,
+      title:
+        this.state.title === undefined
+          ? this.state.course.title
+          : this.state.title,
+      description: this.state.description === undefined
+      ? this.state.course.description
+      : this.state.description,
+      estimatedTime: this.state.estimatedTime === undefined
+      ? this.state.course.estimatedTime
+      : this.state.estimatedTime,
+      materialsNeeded: this.state.materialsNeeded === undefined
+      ? this.state.course.materialsNeeded
+      : this.state.materialsNeeded,
     };
 
     const user = this.props.utility().getUser();
@@ -115,10 +156,10 @@ export default class CreateCourse extends Component {
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
 
-    const CreateCourse = async () => {
+    const UpdateCourse = async () => {
       const res = await fetch(
-        'http://localhost:5000/api/courses',
-        sendData(course, getAuth(user, 'POST'))
+        `http://localhost:5000/api/courses/` + this.props.match.params.id,
+        sendData(course, getAuth(user, 'PUT'))
       );
       if (res.status >= 400) {
         return res.json().then((data) => {
@@ -128,7 +169,7 @@ export default class CreateCourse extends Component {
       return [];
     };
 
-    const res = CreateCourse();
+    const res = UpdateCourse();
 
     res.then((errors) => {
       if (errors !== undefined && errors.length) {

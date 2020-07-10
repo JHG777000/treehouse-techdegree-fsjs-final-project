@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Courses from './Courses';
 import CourseDetail from './CourseDetail';
 import CreateCourse from './CreateCourse';
+import UpdateCourse from './UpdateCourse';
 import Header from './Header';
 import UserSignOut from './UserSignOut';
 import UserSignUp from './UserSignUp';
@@ -91,6 +92,8 @@ export default class App extends React.Component {
     };
 
     this.setState({ user: user, authenticatedUser: null });
+    Cookies.remove('authenticatedUser');
+    Cookies.remove('encodedUser');
   };
 
   getAuth = (user, method) => {
@@ -149,6 +152,20 @@ export default class App extends React.Component {
   };
 
   render() {
+    const renderMergedProps = (component, ...rest) => {
+      const finalProps = Object.assign({}, ...rest);
+      return (
+        React.createElement(component, finalProps)
+      );
+    }
+    
+    const PropsRoute = ({ component, ...rest }) => {
+      return (
+        <Route {...rest} render={routeProps => {
+          return renderMergedProps(component, routeProps, rest);
+        }}/>
+      );
+    }
     return (
       <BrowserRouter>
         <div className="container">
@@ -170,6 +187,7 @@ export default class App extends React.Component {
               <UserSignIn utility={this.utility} />
             </Route>
             <Route exact path="/api/courses/:id" component={CourseDetail} />
+            <PropsRoute exact path="/courses/:id/update" component={UpdateCourse} utility={this.utility}  />
           </Switch>
         </div>
       </BrowserRouter>

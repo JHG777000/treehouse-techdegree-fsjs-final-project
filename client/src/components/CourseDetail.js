@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 export default class CourseDetail extends React.Component {
   constructor() {
@@ -26,6 +26,16 @@ export default class CourseDetail extends React.Component {
   render() {
     const TheCourse = (props) => {
       return (
+        <Fragment>
+        <Fragment>
+        <div className="actions--bar">
+          <div className="bounds">
+            <div className="grid-100"><span><a className="button" href={"/courses/" + this.props.match.params.id + "/update"}>Update Course</a><a className="button" href="#">Delete Course</a></span><a
+                className="button button-secondary" href="/">Return to List</a></div>
+          </div>
+          </div>
+          </Fragment>
+           <Fragment>
         <div className="bounds course--detail">
           <div className="grid-66">
             <div className="course--header">
@@ -52,6 +62,8 @@ export default class CourseDetail extends React.Component {
             </div>
           </div>
         </div>
+        </Fragment>
+        </Fragment>
       );
     };
 
