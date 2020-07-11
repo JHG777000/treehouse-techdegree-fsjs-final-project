@@ -13,6 +13,8 @@ export default class UserSignIn extends Component {
   }
 
   render() {
+    const authUser = this.props.utility().authenticatedUser();
+    if (authUser !== null) window.history.back();
     return (
       <div className="bounds">
         <div className="grid-33 centered signin">

@@ -13,8 +13,8 @@ export default class CourseDetail extends React.Component {
   componentDidMount() {
     this.performQuery(this.props.match.params.id);
   }
-  componentDidUpdate() {}
 
+  //performQuery, fetch course data
   performQuery = async (id) => {
     const res = await fetch(`http://localhost:5000/api/courses/` + id);
     if (res.status === 200)
@@ -24,6 +24,7 @@ export default class CourseDetail extends React.Component {
   };
 
   render() {
+    //get authenticatedUser
     const authUser = this.props.utility().authenticatedUser();
     const TheCourse = (props) => {
       return (
@@ -105,10 +106,12 @@ export default class CourseDetail extends React.Component {
       );
     };
 
+    //Redirect if error
     if (this.state.error !== undefined && this.state.error >= 500)
       return <Redirect to="/error" />;
     if (this.state.error !== undefined && this.state.error === 404)
       return <Redirect to="/notfound" />;
+    //render the course
     if (this.state.course !== undefined) {
       const course = this.state.course;
       return (

@@ -134,7 +134,7 @@ export default class UpdateCourse extends Component {
   };
 
   submit = () => {
-    // Update Course
+    //Update Course
     const course = {
       title: this.state.title,
       description: this.state.description,
@@ -146,7 +146,7 @@ export default class UpdateCourse extends Component {
 
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
-
+    //Update the course with the API
     const UpdateCourse = async () => {
       const res = await fetch(
         `http://localhost:5000/api/courses/` + this.props.match.params.id,

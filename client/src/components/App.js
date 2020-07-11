@@ -19,23 +19,25 @@ import UserSignIn from './UserSignIn';
 import UnhandledError from './UnhandledError';
 import NotFound from './NotFound';
 import Forbidden from './Forbidden';
-
-//Main switch for the App, manages and sets up routes
+//Manages and sets up global state
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      //user stores username(email), and password
       user: {
         username: undefined,
         password: undefined,
       },
+      //authenticatedUser is the user object returned from the API, and
+      //contains firstName, lastName, email, and userId
       authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
+      //errorState contains error state for UpdateCourse, and CreateCourse
       errorState: undefined,
     };
   }
-  componentDidMount() {}
-  componentDidUpdate() {}
 
+  //Allows other components to access global state
   utility = () => {
     return {
       signIn: this.signIn,
@@ -49,6 +51,7 @@ export default class App extends React.Component {
     };
   };
 
+  //signIn, sign in a user
   signIn = async (username, password) => {
     const user = {
       username: username,
@@ -82,16 +85,20 @@ export default class App extends React.Component {
 
     this.setState({ user: user });
 
+    //Slightly better than storing password as plain text
     const encodedPass = btoa(`encodedUser:${Math.random()}:${user.password}`);
 
     const encodedUser = {
       username: user.username,
       password: encodedPass,
     };
+
     Cookies.set('encodedUser', JSON.stringify(encodedUser), { expires: 1 });
+
     return [];
   };
 
+  //signOut, sign out a user
   signOut = () => {
     const user = {
       username: undefined,
@@ -102,6 +109,7 @@ export default class App extends React.Component {
     Cookies.remove('encodedUser');
   };
 
+  //getAuth, get auth header
   getAuth = (user, method) => {
     const options = {
       method,
@@ -116,14 +124,17 @@ export default class App extends React.Component {
     return options;
   };
 
+  //getauthenticatedUser, get the authenticatedUser
   getauthenticatedUser = () => {
     return this.state.authenticatedUser;
   };
 
+  //getUser, get user, from state or a cookie
   getUser = () => {
     let user = Cookies.getJSON('encodedUser') || null;
     if (user === null) return this.state.user;
 
+    //getEncodedPass, decode the password
     const getEncodedPass = (ep) => {
       let i = 0;
       let j = 0;
@@ -147,36 +158,38 @@ export default class App extends React.Component {
       password: getEncodedPass(user.password),
     };
 
+    //make sure state is synced
     this.setState({ user: encodedUser });
 
     return encodedUser;
   };
 
+  //sendData, send data to the API
   sendData = (data, options) => {
     options.body = JSON.stringify(data);
     return options;
   };
-
+  //setError, set error state
   setError = (error) => {
     this.setState({ errorState: error });
   };
-
+  //getError, get error state
   getError = (error) => {
     return this.state.errorState;
   };
 
   render() {
-    const renderMergedProps = (component, ...rest) => {
+    const getMergedProps = (component, ...rest) => {
       const finalProps = Object.assign({}, ...rest);
       return React.createElement(component, finalProps);
     };
 
-    const PropsRoute = ({ component, ...rest }) => {
+    const RouteWithProps = ({ component, ...rest }) => {
       return (
         <Route
           {...rest}
           render={(routeProps) => {
-            return renderMergedProps(component, routeProps, rest);
+            return getMergedProps(component, routeProps, rest);
           }}
         />
       );
@@ -188,7 +201,7 @@ export default class App extends React.Component {
           {...rest}
           render={(routeProps) => {
             return this.state.authenticatedUser ? (
-              renderMergedProps(component, routeProps, rest)
+              getMergedProps(component, routeProps, rest)
             ) : (
               <Redirect
                 to={{
@@ -201,6 +214,7 @@ export default class App extends React.Component {
         />
       );
     };
+    //Main switch for the App, manages and sets up routes
     return (
       <BrowserRouter>
         <div className="container">
@@ -227,7 +241,7 @@ export default class App extends React.Component {
             <Route exact path="/forbidden">
               <Forbidden />
             </Route>
-            <PropsRoute
+            <RouteWithProps
               exact
               path="/api/courses/:id"
               component={CourseDetail}

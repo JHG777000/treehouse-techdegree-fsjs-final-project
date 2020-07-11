@@ -10,8 +10,8 @@ export default class Courses extends React.Component {
   componentDidMount() {
     this.performQuery();
   }
-  componentDidUpdate() {}
 
+  //performQuery, fetch all the courses
   performQuery = () => {
     fetch(`http://localhost:5000/api/courses`)
       .then((response) => response.json())
@@ -28,7 +28,10 @@ export default class Courses extends React.Component {
       const TheCourse = (props) => {
         return (
           <div className="grid-33">
-            <a className="course--module course--link" href={"/api/courses/" + props.id}>
+            <a
+              className="course--module course--link"
+              href={'/api/courses/' + props.id}
+            >
               <h4 className="course--label"> Course </h4>
               <h3 className="course--title">{props.title}</h3>
             </a>
@@ -45,6 +48,7 @@ export default class Courses extends React.Component {
       return <div>{boxes}</div>;
     };
 
+    //render the courses
     return (
       <div>
         <div className="bounds">

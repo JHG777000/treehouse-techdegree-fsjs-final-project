@@ -16,7 +16,6 @@ export default class CreateCourse extends Component {
   }
 
   render() {
-
     if (this.state.error !== undefined) return <Redirect to="/error" />;
 
     const authUser = this.props.utility().authenticatedUser();
@@ -105,7 +104,7 @@ export default class CreateCourse extends Component {
   };
 
   submit = () => {
-    // Create Course
+    //Create Course
     const course = {
       title: this.state.title,
       description: this.state.description,
@@ -117,7 +116,7 @@ export default class CreateCourse extends Component {
 
     const getAuth = this.props.utility().getAuth;
     const sendData = this.props.utility().sendData;
-
+    //Create the course with the API
     const CreateCourse = async () => {
       const res = await fetch(
         'http://localhost:5000/api/courses',
