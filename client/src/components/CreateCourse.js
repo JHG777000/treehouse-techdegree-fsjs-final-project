@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
+import UnhandledError from './UnhandledError';
 
 export default class CreateCourse extends Component {
-  _isMounted = false;
   constructor() {
     super();
     this.state = {
@@ -11,11 +11,15 @@ export default class CreateCourse extends Component {
       description: '',
       estimatedTime: '',
       materialsNeeded: '',
+      error: undefined,
       errors: [],
     };
   }
 
   render() {
+
+   if (this.state.error !== undefined) return <UnhandledError/>; 
+
     const authUser = this.props.utility().authenticatedUser();
     const username =
       authUser === null
@@ -121,6 +125,7 @@ export default class CreateCourse extends Component {
         sendData(course, getAuth(user, 'POST'))
       );
       if (res.status >= 400) {
+        if (res.status >= 500) this.setState({ error: res.status });
         return res.json().then((data) => {
           return data.message;
         });

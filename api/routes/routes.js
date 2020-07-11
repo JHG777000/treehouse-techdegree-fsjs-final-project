@@ -211,7 +211,7 @@ routes.put('/api/courses/:id', authenticateUser, async (req, res) => {
       res.status(403).json({ message: 'User does not own course.' });
     }
   } catch (err) {
-    res.status(400).json({ message: 'Could not find course.' });
+    res.status(404).json({ message: 'Could not find course.' });
   }
 });
 
@@ -225,7 +225,7 @@ routes.delete('/api/courses/:id', authenticateUser, async (req, res) => {
       res.status(403).json({ message: 'User does not own course.' });
     }
   } catch (err) {
-    res.status(400).json({ message: 'Could not find course.' });
+    res.status(404).json({ message: 'Could not find course.' });
   }
 });
 

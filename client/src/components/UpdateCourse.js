@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
+import UnhandledError from './UnhandledError';
 
 export default class UpdateCourse extends Component {
   constructor() {
@@ -16,6 +17,7 @@ export default class UpdateCourse extends Component {
         estimatedTime: '',
         materialsNeeded: '',
       },
+      error: undefined,
       errors: [],
     };
   }
@@ -32,10 +34,20 @@ export default class UpdateCourse extends Component {
       })
       .catch((error) => {
         console.log('Error fetching and parsing data', error);
+        this.setState({ error });
       });
   };
 
   render() {
+    if (this.state.error !== undefined && this.state.error >= 500)
+      return <UnhandledError />;
+
+    if (
+      this.props.utility().getError() !== undefined &&
+      this.props.utility().getError() === 'Could not find course.'
+    )
+      return <UnhandledError />;
+
     const authUser = this.props.utility().authenticatedUser();
     const username =
       authUser === null
@@ -159,6 +171,7 @@ export default class UpdateCourse extends Component {
         sendData(course, getAuth(user, 'PUT'))
       );
       if (res.status >= 400) {
+        this.setState({ error: res.status });
         return res.json().then((data) => {
           return data.message;
         });

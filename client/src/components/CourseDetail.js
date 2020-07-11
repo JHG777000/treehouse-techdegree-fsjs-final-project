@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
+import UnhandledError from './UnhandledError';
 
 export default class CourseDetail extends React.Component {
   constructor() {
     super();
     this.state = {
       course: undefined,
+      error: undefined,
     };
   }
   componentDidMount() {
@@ -21,6 +23,7 @@ export default class CourseDetail extends React.Component {
       })
       .catch((error) => {
         console.log('Error fetching and parsing data', error);
+        this.setState({ error });
       });
   };
 
@@ -105,8 +108,9 @@ export default class CourseDetail extends React.Component {
         </Fragment>
       );
     };
-
+    if (this.state.error !== undefined) return <UnhandledError/>;
     if (this.state.course !== undefined) {
+      if (this.state.course.User === undefined) return <UnhandledError/>
       const course = this.state.course;
       return (
         <TheCourse
