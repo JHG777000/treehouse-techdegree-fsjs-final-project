@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Form from './Form';
-import UnhandledError from './UnhandledError';
 
 export default class CreateCourse extends Component {
   constructor() {
@@ -18,7 +17,7 @@ export default class CreateCourse extends Component {
 
   render() {
 
-   if (this.state.error !== undefined) return <UnhandledError/>; 
+    if (this.state.error !== undefined) return <Redirect to="/error" />;
 
     const authUser = this.props.utility().authenticatedUser();
     const username =
@@ -137,7 +136,7 @@ export default class CreateCourse extends Component {
 
     res.then((errors) => {
       if (errors !== undefined && errors.length) {
-          this.props.utility().setError(errors);
+        this.props.utility().setError(errors);
       }
     });
   };

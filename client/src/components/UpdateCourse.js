@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Form from './Form';
-import UnhandledError from './UnhandledError';
 
 export default class UpdateCourse extends Component {
   constructor() {
@@ -12,6 +11,7 @@ export default class UpdateCourse extends Component {
       estimatedTime: '',
       materialsNeeded: '',
       course: {
+        userId: 0,
         title: '',
         description: '',
         estimatedTime: '',
@@ -26,29 +26,27 @@ export default class UpdateCourse extends Component {
     this.performQuery(this.props.match.params.id);
   }
 
-  performQuery = (id) => {
-    fetch(`http://localhost:5000/api/courses/` + id)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({ course: responseData });
-      })
-      .catch((error) => {
-        console.log('Error fetching and parsing data', error);
-        this.setState({ error });
-      });
+  performQuery = async (id) => {
+    const res = await fetch(`http://localhost:5000/api/courses/` + id);
+    if (res.status === 200)
+      return res.json().then((data) => this.setState({ course: data }));
+
+    if (res.status >= 400) this.setState({ error: res.status });
   };
 
   render() {
-    if (this.state.error !== undefined && this.state.error >= 500)
-      return <UnhandledError />;
-
-    if (
-      this.props.utility().getError() !== undefined &&
-      this.props.utility().getError() === 'Could not find course.'
-    )
-      return <UnhandledError />;
-
     const authUser = this.props.utility().authenticatedUser();
+
+    if (this.state.error !== undefined && this.state.error >= 500)
+      return <Redirect to="/error" />;
+    if (this.state.error !== undefined && this.state.error === 404)
+      return <Redirect to="/notfound" />;
+    if (
+      this.state.course.userId !== 0 &&
+      authUser.id !== this.state.course.userId
+    )
+      return <Redirect to="/forbidden" />;
+
     const username =
       authUser === null
         ? 'noone'
@@ -76,11 +74,7 @@ export default class UpdateCourse extends Component {
                       className="input-title course--title--input"
                       value={this.state.title}
                       onChange={this.change}
-                      placeholder={
-                        this.state.course === undefined
-                          ? ''
-                          : this.state.course.title
-                      }
+                      placeholder={this.state.course.title}
                     />
                     <p>By {username}</p>
                     <div className="course--description">
@@ -90,11 +84,7 @@ export default class UpdateCourse extends Component {
                         type="text"
                         value={this.state.description}
                         onChange={this.change}
-                        placeholder={
-                          this.state.course === undefined
-                            ? ''
-                            : this.state.course.description
-                        }
+                        placeholder={this.state.course.description}
                       />
                     </div>
                   </div>
@@ -113,11 +103,7 @@ export default class UpdateCourse extends Component {
                           className="course--time--input"
                           value={this.state.estimatedTime}
                           onChange={this.change}
-                          placeholder={
-                            this.state.course === undefined
-                              ? ''
-                              : this.state.course.estimatedTime
-                          }
+                          placeholder={this.state.course.estimatedTime}
                         />
                       </li>
                       <li className="course--stats--list--item">
@@ -127,11 +113,7 @@ export default class UpdateCourse extends Component {
                           name="materialsNeeded"
                           value={this.state.materialsNeeded}
                           onChange={this.change}
-                          placeholder={
-                            this.state.course === undefined
-                              ? ''
-                              : this.state.course.materialsNeeded
-                          }
+                          placeholder={this.state.course.materialsNeeded}
                         />
                       </li>
                     </ul>
@@ -171,7 +153,7 @@ export default class UpdateCourse extends Component {
         sendData(course, getAuth(user, 'PUT'))
       );
       if (res.status >= 400) {
-        this.setState({ error: res.status });
+        if (res.status >= 500) this.setState({ error: res.status });
         return res.json().then((data) => {
           return data.message;
         });

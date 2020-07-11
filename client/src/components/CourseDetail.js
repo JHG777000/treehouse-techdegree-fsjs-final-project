@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
-import UnhandledError from './UnhandledError';
+import { Redirect } from 'react-router-dom';
 
 export default class CourseDetail extends React.Component {
   constructor() {
@@ -15,16 +15,12 @@ export default class CourseDetail extends React.Component {
   }
   componentDidUpdate() {}
 
-  performQuery = (id) => {
-    fetch(`http://localhost:5000/api/courses/` + id)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({ course: responseData });
-      })
-      .catch((error) => {
-        console.log('Error fetching and parsing data', error);
-        this.setState({ error });
-      });
+  performQuery = async (id) => {
+    const res = await fetch(`http://localhost:5000/api/courses/` + id);
+    if (res.status === 200)
+      return res.json().then((data) => this.setState({ course: data }));
+
+    if (res.status >= 400) this.setState({ error: res.status });
   };
 
   render() {
@@ -108,9 +104,12 @@ export default class CourseDetail extends React.Component {
         </Fragment>
       );
     };
-    if (this.state.error !== undefined) return <UnhandledError/>;
+
+    if (this.state.error !== undefined && this.state.error >= 500)
+      return <Redirect to="/error" />;
+    if (this.state.error !== undefined && this.state.error === 404)
+      return <Redirect to="/notfound" />;
     if (this.state.course !== undefined) {
-      if (this.state.course.User === undefined) return <UnhandledError/>
       const course = this.state.course;
       return (
         <TheCourse

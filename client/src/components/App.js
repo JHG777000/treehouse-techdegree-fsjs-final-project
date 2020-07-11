@@ -17,6 +17,8 @@ import UserSignOut from './UserSignOut';
 import UserSignUp from './UserSignUp';
 import UserSignIn from './UserSignIn';
 import UnhandledError from './UnhandledError';
+import NotFound from './NotFound';
+import Forbidden from './Forbidden';
 
 //Main switch for the App, manages and sets up routes
 export default class App extends React.Component {
@@ -156,12 +158,12 @@ export default class App extends React.Component {
   };
 
   setError = (error) => {
-    this.setState({errorState: error});
-  }
+    this.setState({ errorState: error });
+  };
 
   getError = (error) => {
     return this.state.errorState;
-  }
+  };
 
   render() {
     const renderMergedProps = (component, ...rest) => {
@@ -171,11 +173,14 @@ export default class App extends React.Component {
 
     const PropsRoute = ({ component, ...rest }) => {
       return (
-        <Route {...rest} render={routeProps => {
-          return renderMergedProps(component, routeProps, rest);
-        }}/>
+        <Route
+          {...rest}
+          render={(routeProps) => {
+            return renderMergedProps(component, routeProps, rest);
+          }}
+        />
       );
-    }
+    };
 
     const PrivateRoute = ({ component, redirectTo, ...rest }) => {
       return (
@@ -214,7 +219,13 @@ export default class App extends React.Component {
               <UserSignIn utility={this.utility} />
             </Route>
             <Route exact path="/error">
-              <UnhandledError utility={this.utility} />
+              <UnhandledError />
+            </Route>
+            <Route exact path="/notfound">
+              <NotFound />
+            </Route>
+            <Route exact path="/forbidden">
+              <Forbidden />
             </Route>
             <PropsRoute
               exact
@@ -240,6 +251,7 @@ export default class App extends React.Component {
               component={DeleteCourse}
               utility={this.utility}
             />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </BrowserRouter>
