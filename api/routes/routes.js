@@ -134,8 +134,7 @@ routes.get('/api/courses', async (req, res) => {
       },
     ],
   });
-  res.json(sendCourses(courses));
-  res.status(200);
+  res.status(200).json(sendCourses(courses));
 });
 
 routes.get('/api/courses/:id', async (req, res) => {

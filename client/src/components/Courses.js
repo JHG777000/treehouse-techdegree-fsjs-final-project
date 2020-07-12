@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 export default class Courses extends React.Component {
   constructor() {
@@ -12,18 +13,17 @@ export default class Courses extends React.Component {
   }
 
   //performQuery, fetch all the courses
-  performQuery = () => {
-    fetch(`http://localhost:5000/api/courses`)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({ courses: responseData });
-      })
-      .catch((error) => {
-        console.log('Error fetching and parsing data', error);
-      });
+  performQuery = async () => {
+    const res = await fetch('http://localhost:5000/api/courses');
+    if (res.status === 200)
+      return res.json().then((data) => this.setState({ courses: data }));
+
+    if (res.status >= 500) this.setState({ error: res.status });
   };
 
   render() {
+    if (this.state.error !== undefined && this.state.error >= 500)
+      return <Redirect to="/error" />;
     const Boxes = (props) => {
       const TheCourse = (props) => {
         return (

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Form from './Form';
 
 export default class UserSignIn extends Component {
@@ -13,6 +13,11 @@ export default class UserSignIn extends Component {
   }
 
   render() {
+    if (
+      this.props.utility().getSignInError() !== undefined &&
+      this.props.utility().getSignInError() >= 500
+    )
+      return <Redirect to="/error" />;
     const authUser = this.props.utility().authenticatedUser();
     if (authUser !== null) window.history.back();
     return (

@@ -27,7 +27,7 @@ export default class UpdateCourse extends Component {
   }
 
   performQuery = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/courses/` + id);
+    const res = await fetch('http://localhost:5000/api/courses/' + id);
     if (res.status === 200)
       return res.json().then((data) => this.setState({ course: data }));
 

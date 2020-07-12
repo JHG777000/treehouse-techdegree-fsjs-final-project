@@ -34,6 +34,7 @@ export default class App extends React.Component {
       authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
       //errorState contains error state for UpdateCourse, and CreateCourse
       errorState: undefined,
+      signInError: undefined,
     };
   }
 
@@ -48,6 +49,7 @@ export default class App extends React.Component {
       sendData: this.sendData,
       setError: this.setError,
       getError: this.getError,
+      getSignInError: this.getSignInError,
     };
   };
 
@@ -65,6 +67,10 @@ export default class App extends React.Component {
 
     if (authUser.status >= 400) {
       this.setState({ authenticatedUser: null });
+      if (authUser.status >= 500) {
+        this.setState({ signInError: authUser.status });
+        return;
+      }
       return authUser.json().then((data) => {
         return data.message;
       });
@@ -178,6 +184,11 @@ export default class App extends React.Component {
     return this.state.errorState;
   };
 
+  //getSignInError, get sign in error state
+  getSignInError = (error) => {
+    return this.state.signInError;
+  };
+
   render() {
     const getMergedProps = (component, ...rest) => {
       const finalProps = Object.assign({}, ...rest);
@@ -197,11 +208,7 @@ export default class App extends React.Component {
 
     const MyRedirect = (props) => {
       if (props.onSuccess !== undefined)
-        return (
-          <UserSignIn
-            utility={props.utility}
-          />
-        );
+        return <UserSignIn utility={props.utility} />;
       return (
         <Redirect
           to={{
@@ -221,7 +228,6 @@ export default class App extends React.Component {
               getMergedProps(component, routeProps, rest)
             ) : (
               <MyRedirect
-                id={routeProps.match.params.id}
                 onSuccess={rest.onSuccess}
                 utility={rest.utility}
                 redirectTo={redirectTo}
