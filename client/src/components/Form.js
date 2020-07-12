@@ -9,6 +9,23 @@ const Form = (props) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
+    if (props.cancel !== undefined) props.cancel();
+  };
+
+  const CancelButton = (props) => {
+    if (props.cancel !== undefined) {
+      return (
+        <button className="button button-secondary" onClick={handleCancel}>
+          Cancel
+        </button>
+      );
+    } else {
+      return (
+        <button className="button button-secondary" onClick={handleCancel}>
+          <Link to="/">Cancel</Link>
+        </button>
+      );
+    }
   };
 
   let buttonClassName = props.buttonClassName;
@@ -25,9 +42,7 @@ const Form = (props) => {
           <button className="button" type="submit">
             {props.submitButtonText}
           </button>
-          <button className="button button-secondary" onClick={handleCancel}>
-            <Link to="/">Cancel</Link>
-          </button>
+          <CancelButton cancel={props.cancel} />
         </div>
       </form>
     </div>

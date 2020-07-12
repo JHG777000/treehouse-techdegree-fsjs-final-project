@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Form from './Form';
 
@@ -23,6 +22,7 @@ export default class UserSignUp extends Component {
         <div className="grid-33 centered signin">
           <h1>Sign Up</h1>
           <Form
+            cancel={this.cancel}
             errors={this.state.errors}
             utility={undefined}
             submit={this.submit}
@@ -77,6 +77,10 @@ export default class UserSignUp extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+  };
+
+  cancel = () => {
+    window.history.back();
   };
 
   submit = () => {

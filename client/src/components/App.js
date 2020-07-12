@@ -195,6 +195,23 @@ export default class App extends React.Component {
       );
     };
 
+    const MyRedirect = (props) => {
+      if (props.onSuccess !== undefined)
+        return (
+          <UserSignIn
+            utility={props.utility}
+          />
+        );
+      return (
+        <Redirect
+          to={{
+            pathname: props.redirectTo,
+            state: { from: props.location },
+          }}
+        />
+      );
+    };
+
     const PrivateRoute = ({ component, redirectTo, ...rest }) => {
       return (
         <Route
@@ -203,11 +220,12 @@ export default class App extends React.Component {
             return this.state.authenticatedUser ? (
               getMergedProps(component, routeProps, rest)
             ) : (
-              <Redirect
-                to={{
-                  pathname: redirectTo,
-                  state: { from: routeProps.location },
-                }}
+              <MyRedirect
+                id={routeProps.match.params.id}
+                onSuccess={rest.onSuccess}
+                utility={rest.utility}
+                redirectTo={redirectTo}
+                location={routeProps.location}
               />
             );
           }}
@@ -251,12 +269,16 @@ export default class App extends React.Component {
               exact
               path="/courses/create"
               component={CreateCourse}
+              redirectTo="/signin"
+              onSuccess={0}
               utility={this.utility}
             />
             <PrivateRoute
               exact
               path="/courses/:id/update"
               component={UpdateCourse}
+              redirectTo="/signin"
+              onSuccess={0}
               utility={this.utility}
             />
             <PrivateRoute

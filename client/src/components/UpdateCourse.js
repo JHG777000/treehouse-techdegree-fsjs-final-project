@@ -133,6 +133,10 @@ export default class UpdateCourse extends Component {
     });
   };
 
+  cancel = () => {
+    window.history.back();
+  }
+
   submit = () => {
     //Update Course
     const course = {
