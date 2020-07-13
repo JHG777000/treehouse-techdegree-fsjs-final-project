@@ -138,5 +138,8 @@ export default class CreateCourse extends Component {
         this.props.utility().setError(errors);
       }
     });
+    
+    window.history.back();
+
   };
 }

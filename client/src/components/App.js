@@ -265,18 +265,18 @@ export default class App extends React.Component {
             <Route exact path="/forbidden">
               <Forbidden />
             </Route>
-            <RouteWithProps
-              exact
-              path="/api/courses/:id"
-              component={CourseDetail}
-              utility={this.utility}
-            />
             <PrivateRoute
               exact
               path="/courses/create"
               component={CreateCourse}
               redirectTo="/signin"
               onSuccess={0}
+              utility={this.utility}
+            />
+            <RouteWithProps
+              exact
+              path="/courses/:id"
+              component={CourseDetail}
               utility={this.utility}
             />
             <PrivateRoute

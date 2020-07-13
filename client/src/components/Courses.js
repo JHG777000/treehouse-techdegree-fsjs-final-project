@@ -10,6 +10,7 @@ export default class Courses extends React.Component {
   }
   componentDidMount() {
     this.performQuery();
+    setInterval(() => { this.performQuery(); }, 500);
   }
 
   //performQuery, fetch all the courses
@@ -30,7 +31,7 @@ export default class Courses extends React.Component {
           <div className="grid-33">
             <a
               className="course--module course--link"
-              href={'/api/courses/' + props.id}
+              href={'/courses/' + props.id}
             >
               <h4 className="course--label"> Course </h4>
               <h3 className="course--title">{props.title}</h3>

@@ -29,7 +29,17 @@ export default class UpdateCourse extends Component {
   performQuery = async (id) => {
     const res = await fetch('http://localhost:5000/api/courses/' + id);
     if (res.status === 200)
-      return res.json().then((data) => this.setState({ course: data }));
+      return res
+        .json()
+        .then((data) => this.setState({ course: data }))
+        .then(() =>
+          this.setState({
+            title: this.state.course.title,
+            description: this.state.course.description,
+            estimatedTime: this.state.course.estimatedTime,
+            materialsNeeded: this.state.course.materialsNeeded,
+          })
+        );
 
     if (res.status >= 400) this.setState({ error: res.status });
   };
@@ -41,7 +51,10 @@ export default class UpdateCourse extends Component {
       return <Redirect to="/error" />;
     if (this.state.error !== undefined && this.state.error === 404)
       return <Redirect to="/notfound" />;
-    if (this.state.course.userId !== 0 && authUser.id !== this.state.course.userId)
+    if (
+      this.state.course.userId !== 0 &&
+      authUser.id !== this.state.course.userId
+    )
       return <Redirect to="/forbidden" />;
 
     const username =
@@ -71,7 +84,6 @@ export default class UpdateCourse extends Component {
                       className="input-title course--title--input"
                       value={this.state.title}
                       onChange={this.change}
-                      placeholder={this.state.course.title}
                     />
                     <p>By {username}</p>
                     <div className="course--description">
@@ -169,5 +181,12 @@ export default class UpdateCourse extends Component {
         this.props.utility().setError(errors);
       }
     });
+    if (
+      course.title !== '' &&
+      course.title !== ' ' &&
+      course.description !== '' &&
+      course.description !== ' '
+    )
+      window.location.reload();
   };
 }

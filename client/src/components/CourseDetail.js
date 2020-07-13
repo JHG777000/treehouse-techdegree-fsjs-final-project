@@ -12,6 +12,9 @@ export default class CourseDetail extends React.Component {
   }
   componentDidMount() {
     this.performQuery(this.props.match.params.id);
+    setInterval(() => {
+      this.performQuery(this.props.match.params.id);
+    }, 500);
   }
 
   //performQuery, fetch course data
