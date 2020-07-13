@@ -41,10 +41,7 @@ export default class UpdateCourse extends Component {
       return <Redirect to="/error" />;
     if (this.state.error !== undefined && this.state.error === 404)
       return <Redirect to="/notfound" />;
-    if (
-      this.state.course.userId !== 0 &&
-      authUser.id !== this.state.course.userId
-    )
+    if (this.state.course.userId !== 0 && authUser.id !== this.state.course.userId)
       return <Redirect to="/forbidden" />;
 
     const username =
@@ -135,7 +132,7 @@ export default class UpdateCourse extends Component {
 
   cancel = () => {
     window.history.back();
-  }
+  };
 
   submit = () => {
     //Update Course
