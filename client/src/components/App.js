@@ -34,7 +34,7 @@ export default class App extends React.Component {
       authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
       //errorState contains error state for UpdateCourse, and CreateCourse
       errorState: undefined,
-      signInError: undefined,
+      internalError: undefined,
     };
   }
 
@@ -49,7 +49,8 @@ export default class App extends React.Component {
       sendData: this.sendData,
       setError: this.setError,
       getError: this.getError,
-      getSignInError: this.getSignInError,
+      getInternalError: this.getInternalError,
+      setInternalError: this.setInternalError,
     };
   };
 
@@ -68,7 +69,7 @@ export default class App extends React.Component {
     if (authUser.status >= 400) {
       this.setState({ authenticatedUser: null });
       if (authUser.status >= 500) {
-        this.setState({ signInError: authUser.status });
+        this.setState({ internalError: authUser.status });
         return;
       }
       return authUser.json().then((data) => {
@@ -180,13 +181,18 @@ export default class App extends React.Component {
     this.setState({ errorState: error });
   };
   //getError, get error state
-  getError = (error) => {
+  getError = () => {
     return this.state.errorState;
   };
 
-  //getSignInError, get sign in error state
-  getSignInError = (error) => {
-    return this.state.signInError;
+  //getInternalError, get internal error state
+  getInternalError = () => {
+    return this.state.internalError;
+  };
+
+  //setInternalError, set internal error state
+  setInternalError = (error) => {
+    this.setState({internalError: error});
   };
 
   render() {

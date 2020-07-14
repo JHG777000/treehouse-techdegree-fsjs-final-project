@@ -175,7 +175,8 @@ routes.post('/api/courses', authenticateUser, async (req, res) => {
         req.body.materialsNeeded === undefined ? '' : req.body.materialsNeeded,
     });
     res.location('/api/courses/' + course.id);
-    res.status(500).json("Don't panic!");
+    res.status(201).end(); //res.status(500).json("Don't panic!");
+
   } catch (err) {
     if (err.name === 'SequelizeValidationError') {
       res.status(400).json({ message: err.message });

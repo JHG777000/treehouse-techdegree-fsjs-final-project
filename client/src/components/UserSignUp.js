@@ -10,17 +10,14 @@ export default class UserSignUp extends Component {
       lastName: '',
       emailAddress: '',
       password: '',
-      error: undefined,
       errors: [],
     };
   }
 
   render() {
-    if (this.state.error !== undefined && this.state.error >= 500)
-      return <Redirect to="/error" />;
     if (
-      this.props.utility().getSignInError() !== undefined &&
-      this.props.utility().getSignInError() >= 500
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
     )
       return <Redirect to="/error" />;
     const authUser = this.props.utility().authenticatedUser();
@@ -114,7 +111,10 @@ export default class UserSignUp extends Component {
         sendData(user, getAuth(user0, 'POST'))
       );
       if (res.status >= 400) {
-        if (res.status >= 500) this.setState({ error: res.status });
+        if (res.status >= 500) {
+          this.props.utility().setInternalError(res.status);
+          return [];
+        }
         return res.json().then((data) => {
           return data.message;
         });

@@ -10,7 +10,9 @@ export default class Courses extends React.Component {
   }
   componentDidMount() {
     this.performQuery();
-    setInterval(() => { this.performQuery(); }, 500);
+    setInterval(() => {
+      this.performQuery();
+    }, 500);
   }
 
   //performQuery, fetch all the courses
@@ -19,11 +21,14 @@ export default class Courses extends React.Component {
     if (res.status === 200)
       return res.json().then((data) => this.setState({ courses: data }));
 
-    if (res.status >= 500) this.setState({ error: res.status });
+    if (res.status >= 500) this.props.utility().setInternalError(res.status);
   };
 
   render() {
-    if (this.state.error !== undefined && this.state.error >= 500)
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
+    )
       return <Redirect to="/error" />;
     const Boxes = (props) => {
       const TheCourse = (props) => {

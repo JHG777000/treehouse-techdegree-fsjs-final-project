@@ -14,8 +14,8 @@ export default class UserSignIn extends Component {
 
   render() {
     if (
-      this.props.utility().getSignInError() !== undefined &&
-      this.props.utility().getSignInError() >= 500
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
     )
       return <Redirect to="/error" />;
     const authUser = this.props.utility().authenticatedUser();

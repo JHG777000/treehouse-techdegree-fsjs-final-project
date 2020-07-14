@@ -10,13 +10,15 @@ export default class CreateCourse extends Component {
       description: '',
       estimatedTime: '',
       materialsNeeded: '',
-      error: undefined,
     };
   }
 
   render() {
-    if (this.state.error !== undefined) return <Redirect to="/error" />;
-
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
+    )
+      return <Redirect to="/error" />;
     const authUser = this.props.utility().authenticatedUser();
     const username =
       authUser === null
@@ -123,8 +125,8 @@ export default class CreateCourse extends Component {
       );
       if (res.status >= 400) {
         if (res.status >= 500) {
-          this.setState({ error: res.status });
-          return;
+          this.props.utility().setInternalError(res.status);
+          return [];
         }
         return res.json().then((data) => {
           return data.message;

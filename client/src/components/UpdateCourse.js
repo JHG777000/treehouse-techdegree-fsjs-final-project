@@ -17,7 +17,6 @@ export default class UpdateCourse extends Component {
         estimatedTime: '',
         materialsNeeded: '',
       },
-      error: undefined,
       errors: [],
     };
   }
@@ -41,16 +40,23 @@ export default class UpdateCourse extends Component {
           })
         );
 
-    if (res.status >= 400) this.setState({ error: res.status });
+    if (res.status >= 400) this.props.utility().setInternalError(res.status);
   };
 
   render() {
     const authUser = this.props.utility().authenticatedUser();
 
-    if (this.state.error !== undefined && this.state.error >= 500)
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
+    )
       return <Redirect to="/error" />;
-    if (this.state.error !== undefined && this.state.error === 404)
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() === 404
+    )
       return <Redirect to="/notfound" />;
+
     if (
       this.state.course.userId !== 0 &&
       authUser.id !== this.state.course.userId
@@ -166,7 +172,10 @@ export default class UpdateCourse extends Component {
         sendData(course, getAuth(user, 'PUT'))
       );
       if (res.status >= 400) {
-        if (res.status >= 500) this.setState({ error: res.status });
+        if (res.status >= 500) {
+          this.props.utility().setInternalError(res.status);
+          return [];
+        }
         return res.json().then((data) => {
           return data.message;
         });

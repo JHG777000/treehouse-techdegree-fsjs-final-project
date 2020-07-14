@@ -7,7 +7,6 @@ export default class CourseDetail extends React.Component {
     super();
     this.state = {
       course: undefined,
-      error: undefined,
     };
   }
   componentDidMount() {
@@ -23,7 +22,7 @@ export default class CourseDetail extends React.Component {
     if (res.status === 200)
       return res.json().then((data) => this.setState({ course: data }));
 
-    if (res.status >= 400) this.setState({ error: res.status });
+    if (res.status >= 400) this.props.utility().setInternalError(res.status);
   };
 
   render() {
@@ -110,10 +109,17 @@ export default class CourseDetail extends React.Component {
     };
 
     //Redirect if error
-    if (this.state.error !== undefined && this.state.error >= 500)
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() >= 500
+    )
       return <Redirect to="/error" />;
-    if (this.state.error !== undefined && this.state.error === 404)
+    if (
+      this.props.utility().getInternalError() !== undefined &&
+      this.props.utility().getInternalError() === 404
+    )
       return <Redirect to="/notfound" />;
+
     //render the course
     if (this.state.course !== undefined) {
       const course = this.state.course;
