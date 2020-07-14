@@ -51,6 +51,14 @@ const Form = (props) => {
 
 const ShowErrors = (props) => {
   let errors = props.errors;
+
+  if (errors === 'Created Course!' || errors === 'Updated Course!') {
+    return (
+      <div>
+        <h3 className="validation--errors--label">{errors}</h3>
+      </div>
+    );
+  }
   if (errors !== undefined && errors.length) {
     let errors = [props.errors];
     return (

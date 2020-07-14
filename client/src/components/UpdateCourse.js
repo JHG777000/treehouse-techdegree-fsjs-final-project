@@ -177,16 +177,11 @@ export default class UpdateCourse extends Component {
     const res = UpdateCourse();
 
     res.then((errors) => {
+      if (errors === undefined || (errors !== undefined && errors.length === 0))
+        this.props.utility().setError('Updated Course!');
       if (errors !== undefined && errors.length) {
         this.props.utility().setError(errors);
       }
     });
-    if (
-      course.title !== '' &&
-      course.title !== ' ' &&
-      course.description !== '' &&
-      course.description !== ' '
-    )
-      window.location.reload();
   };
 }

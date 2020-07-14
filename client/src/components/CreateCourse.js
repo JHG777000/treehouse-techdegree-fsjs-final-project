@@ -11,7 +11,6 @@ export default class CreateCourse extends Component {
       estimatedTime: '',
       materialsNeeded: '',
       error: undefined,
-      errors: [],
     };
   }
 
@@ -123,7 +122,10 @@ export default class CreateCourse extends Component {
         sendData(course, getAuth(user, 'POST'))
       );
       if (res.status >= 400) {
-        if (res.status >= 500) this.setState({ error: res.status });
+        if (res.status >= 500) {
+          this.setState({ error: res.status });
+          return;
+        }
         return res.json().then((data) => {
           return data.message;
         });
@@ -134,12 +136,11 @@ export default class CreateCourse extends Component {
     const res = CreateCourse();
 
     res.then((errors) => {
+      if (errors === undefined || (errors !== undefined && errors.length === 0))
+        this.props.utility().setError('Created Course!');
       if (errors !== undefined && errors.length) {
         this.props.utility().setError(errors);
       }
     });
-    
-    window.history.back();
-
   };
 }
