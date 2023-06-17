@@ -1,1 +1,1 @@
-# treehouse-techdegree-fsjs-project-10
+# treehouse-techdegree-fsjs-final-project
